@@ -10,6 +10,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "ast.h"
 
@@ -37,6 +38,16 @@ ast_node *ast_node_bool(int value)
   return ast_node_new(ast_BOOL, (ast_node_value *)&value);
 }
 
+ast_node *ast_node_ident(char *value)
+{
+  return ast_node_new(ast_IDENT, (ast_node_value *)value); // Maybe don't dupe it?
+}
+
+ast_node *ast_node_string(char *value)
+{
+  return ast_node_new(ast_STRING, (ast_node_value *)value); // Maybe don't dupe it?
+}
+
 ast_node *ast_node_object()
 {
   UT_array *nodes;
@@ -53,7 +64,7 @@ ast_node *ast_node_array()
   return ast_node_new(ast_ARRAY, (ast_node_value *)nodes);
 }
 
-int ast_node_object_append(ast_node *root, ast_node *node)
+int ast_node_object_append(struct ast_node *root, ast_node *node)
 {
   if (root->type != ast_OBJECT)
   {
@@ -65,7 +76,7 @@ int ast_node_object_append(ast_node *root, ast_node *node)
   return 1;
 }
 
-int ast_node_array_append(ast_node *root, ast_node *node)
+int ast_node_array_append(struct ast_node *root, ast_node *node)
 {
   if (root->type != ast_ARRAY)
   {

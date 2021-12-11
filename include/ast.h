@@ -32,7 +32,7 @@ typedef union
   UT_array *children;
 } ast_node_value;
 
-typedef struct _ast_node
+typedef struct ast_node
 {
   ast_node_type type;
   ast_node_value *value;
@@ -43,8 +43,10 @@ static UT_icd ast_node_icd = {sizeof(ast_node), NULL, NULL, NULL};
 ast_node *ast_node_new(ast_node_type type, ast_node_value *value);
 ast_node *ast_node_null();
 ast_node *ast_node_bool(int value);
+ast_node *ast_node_ident(char *value);
+ast_node *ast_node_string(char *value);
 ast_node *ast_node_object();
 ast_node *ast_node_array();
 
-int ast_node_object_append(ast_node *root, ast_node *node);
-int ast_node_array_append(ast_node *root, ast_node *node);
+int ast_node_object_append(struct ast_node *root, ast_node *node);
+int ast_node_array_append(struct ast_node *root, ast_node *node);

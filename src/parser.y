@@ -18,26 +18,37 @@
 %header "include/parser.tab.h"
 
 %code {
+	#include "ast.h"
+
 	extern void yyerror(YYLTYPE* loc, const char* s);
 	extern void yywarn (YYLTYPE* loc, const char* s);
 }
 
 %union {
-  char* s_val;
+  char* string;
+	struct ast_node* node;
 }
 
 %token EOL
-%token <s_val> IDENT
+%token <string> IDENT
+
+%type <node> values
+%type <node> value
 
 %%
 
 values : 
-		value
-	| values value
+		value { 
+			$$ = ast_node_array();
+			ast_node_array_append($$, $1);
+		}
+	| values value {
+			ast_node_array_append($$, $1);
+		}
 
 value : 
-		IDENT 		{ printf("Identifier: %s\n", $1); }
-	| IDENT EOL { printf("Identifier: %s\n", $1); }
+		IDENT 		{ $$ = ast_node_ident($1); }
+	| IDENT EOL { $$ = ast_node_ident($1); }
 
 %%
 

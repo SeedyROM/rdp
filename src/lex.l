@@ -22,11 +22,10 @@
 blank [ \t]
 identifier [a-zA-Z][a-zA-Z_0-9]*
 
-
 %%
 
 {blank}       ;
 \n            { return T_EOL; }
-{identifier}  { yylval->s_val = strdup(yytext); return T_IDENT; }
+{identifier}  { yylval->string = strdup(yytext); return T_IDENT; }
 
 %%
