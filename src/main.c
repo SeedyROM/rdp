@@ -19,9 +19,19 @@
 int main(int argc, char *argv[])
 {
   ast_node *root = ast_node_object();
-  ast_node *node = ast_node_null();
+  ast_node *node0 = ast_node_bool(1);
+  ast_node *node1 = ast_node_bool(0);
+  ast_node *node2 = ast_node_null();
 
-  ast_node_object_append(root, node);
+  ast_node_object_append(root, node0);
+  ast_node_object_append(root, node1);
+  ast_node_object_append(root, node2);
+
+  ast_node *p = NULL;
+  while ((p = (ast_node *)utarray_next((UT_array *)root->value, p)))
+  {
+    printf("%d\n", p->type);
+  }
 
   FILE *f = fopen("./test.txt", "r");
   if (f == NULL)
