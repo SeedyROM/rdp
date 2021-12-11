@@ -13,7 +13,7 @@ DEPS := $(OBJS:.o=.d)
 
 # Compiler and other tool flags
 CC := gcc
-CFLAGS := -ggdb -g
+CFLAGS := -ggdb -g -Iinclude
 FLEX := flex
 # FLEX_FLAGS :=
 BISON := bison

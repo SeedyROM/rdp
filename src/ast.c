@@ -57,7 +57,19 @@ int ast_node_object_append(ast_node *root, ast_node *node)
 {
   if (root->type != ast_OBJECT)
   {
-    fprintf(stderr, "Cannot append to node of type %s\n", root->type);
+    fprintf(stderr, "Cannot append %s to node of type %s\n", node->type, root->type);
+    return 0;
+  }
+
+  utarray_push_back((UT_array *)root->value, node);
+  return 1;
+}
+
+int ast_node_array_append(ast_node *root, ast_node *node)
+{
+  if (root->type != ast_ARRAY)
+  {
+    fprintf(stderr, "Cannot append %s to node of type %s\n", node->type, root->type);
     return 0;
   }
 

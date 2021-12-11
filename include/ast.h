@@ -47,3 +47,4 @@ ast_node *ast_node_object();
 ast_node *ast_node_array();
 
 int ast_node_object_append(ast_node *root, ast_node *node);
+int ast_node_array_append(ast_node *root, ast_node *node);

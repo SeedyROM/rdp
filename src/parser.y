@@ -15,7 +15,7 @@
 %define parse.error verbose
 %define api.token.prefix {T_}
 %locations
-
+%header "include/parser.tab.h"
 
 %code {
 	extern void yyerror(YYLTYPE* loc, const char* s);

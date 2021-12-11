@@ -12,12 +12,11 @@
 %option 8bit reentrant bison-bridge bison-locations
 %option warn noyywrap nodefault stack yylineno
 
-%option header-file="src/lex.yy.h"
+%option header-file="include/lex.yy.h"
 
 %{
   #include <string.h>
-
-  #include "parser.tab.h"  
+  #include <parser.tab.h>  
 %}
 
 blank [ \t]
