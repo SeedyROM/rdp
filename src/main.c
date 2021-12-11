@@ -16,14 +16,12 @@
 
 #include "ast.h"
 
-
 int main(int argc, char *argv[])
 {
   ast_node *root = ast_node_object();
   ast_node *node = ast_node_null();
 
   ast_node_object_append(root, node);
-
 
   FILE *f = fopen("./test.txt", "r");
   if (f == NULL)

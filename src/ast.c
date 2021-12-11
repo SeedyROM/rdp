@@ -22,6 +22,7 @@ ast_node *ast_node_new(ast_node_type type, ast_node_value *value)
     return NULL;
   }
 
+  node->type = type;
   node->value = value;
   return node;
 }
@@ -33,7 +34,7 @@ ast_node *ast_node_null()
 
 ast_node *ast_node_bool(int value)
 {
-  return ast_node_new(ast_BOOL, (ast_node_value*) &value);
+  return ast_node_new(ast_BOOL, (ast_node_value *)&value);
 }
 
 ast_node *ast_node_object()
@@ -41,7 +42,7 @@ ast_node *ast_node_object()
   UT_array *nodes;
   utarray_new(nodes, &ast_node_icd);
 
-  return ast_node_new(ast_OBJECT, (ast_node_value*) nodes);
+  return ast_node_new(ast_OBJECT, (ast_node_value *)nodes);
 }
 
 ast_node *ast_node_array()
@@ -49,16 +50,17 @@ ast_node *ast_node_array()
   UT_array *nodes;
   utarray_new(nodes, &ast_node_icd);
 
-  return ast_node_new(ast_ARRAY, (ast_node_value*) nodes);
+  return ast_node_new(ast_ARRAY, (ast_node_value *)nodes);
 }
 
-int ast_node_object_append(ast_node* root, ast_node* node)
+int ast_node_object_append(ast_node *root, ast_node *node)
 {
-  if(root->type != ast_OBJECT) {
+  if (root->type != ast_OBJECT)
+  {
     fprintf(stderr, "Cannot append to node of type %s\n", root->type);
     return 0;
   }
 
-  utarray_push_back((UT_array*)root->value, node);
+  utarray_push_back((UT_array *)root->value, node);
   return 1;
 }
