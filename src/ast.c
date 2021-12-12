@@ -144,7 +144,7 @@ int ast_node_array_append(struct ast_node *root, ast_node *node)
 
 inline void __ast_print_debug_indent(size_t depth)
 {
-  printf("%0*s", depth * 2, "");
+  printf("%0*s", depth * 2, ""); // This simplifies the printf callback and prints * N many spaces, 2 for now
 }
 
 void __ast_print_debug_inner(ast_node *node, size_t max_depth, size_t depth)
