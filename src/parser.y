@@ -13,11 +13,12 @@
 %define api.push-pull push // Don't circularly rely on the yylex method, push tokens to our parser when needed
 %define parse.trace // Helps debug logs
 %define parse.error verbose // Helps errors
-%define api.token.prefix {T_} // Preface our tokens with a T to make use later on simpler
-%locations // Use bison locations, flex has a complimentary option we're using called %option `bison-locations`
+%define api.token.prefix {T_} // Preface our tokens with a T to make use later simpler
+%locations // Use bison locations, flex has a complimentary option we're using called `%option bison-locations`
 %header "include/parser.tab.h" // Generate a header file in the include dir with the bison impl
 
-// Include our AST type at the "top" (aka before the defines) that will allow us to pass it to our defines above as a valid type
+// Include our AST type at the "top" (aka before the defines) that will allow us to pass it to our gen'd params below
+// AKA %*-param 
 %code top {
 	#include "ast.h"
 }
@@ -34,9 +35,7 @@
 %lex-param	 { struct ast_node* document }
 %parse-param { struct ast_node* document }
 
-// Create a bison union to handle the different types our tokens will emit
-// The word emitting is important for the push parser because we don't wait
-// for the lexer to ask what the value means.
+// Create a bison union to handle the different types our tokens will emit.
 %union {
   char* string;
 	struct ast_node* node;

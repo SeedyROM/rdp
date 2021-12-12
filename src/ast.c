@@ -153,7 +153,7 @@ void __ast_print_debug_inner(ast_node *node, size_t max_depth, size_t depth)
   if (depth >= max_depth)
     return;
 
-  // Use to handle object and array recursive calls
+  // Used to handle object and array recursive calls
   ast_node *child = NULL;
 
   // Help with prettier printing
