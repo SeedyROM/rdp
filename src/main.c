@@ -21,42 +21,46 @@
 
 void _print_ast_debug_inner(ast_node *node, size_t max_depth, size_t depth)
 {
-  if(depth >= max_depth) return;
+  if (depth >= max_depth)
+    return;
 
-  switch(node->type) {
-    case ast_OBJECT:
-      printf("Object:\n");
-      ast_node* child = NULL;
+  ast_node *child = NULL;
 
-      while((child = (ast_node*)utarray_next((UT_array*) node->value, child))) {
-        _print_ast_debug_inner((ast_node *)child, max_depth, depth + 1);
-      }
+  switch (node->type)
+  {
+  case ast_OBJECT:
+    printf("Object:\n");
+
+    while ((child = (ast_node *)utarray_next((UT_array *)node->value, child)))
+    {
+      _print_ast_debug_inner(child, max_depth, depth + 1);
+    }
     break;
 
-    case ast_ARRAY:
-      printf("Array:\n");
-      ast_node* child = NULL;
+  case ast_ARRAY:
+    printf("Array:\n");
 
-      while((child = (ast_node*)utarray_next((UT_array*) node->value, child))) {
-        _print_ast_debug_inner((ast_node *)child, max_depth, depth + 1);
-      }
+    while ((child = (ast_node *)utarray_next((UT_array *)node->value, child)))
+    {
+      _print_ast_debug_inner(child, max_depth, depth + 1);
+    }
     break;
 
-    case ast_NULL:
-      printf("Null\n");
+  case ast_NULL:
+    printf("Null\n");
     break;
 
-    case ast_BOOL:
-      printf("Bool: %d\n", node->value);
+  case ast_BOOL:
+    printf("Bool: %d\n", node->value);
     break;
 
-    case ast_IDENT:
-      printf("Ident: %s\n", node->value);
+  case ast_IDENT:
+    printf("Ident: %s\n", node->value);
     break;
 
-    default:
-      fprintf(stderr, "Invalid node %s\n", node->type);
-      exit(1);
+  default:
+    fprintf(stderr, "Invalid node %s\n", node->type);
+    exit(1);
     return;
   }
 }
