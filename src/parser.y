@@ -17,47 +17,47 @@
 %locations /* Use bison locations, flex has a complimentary option we're using called `%option bison-locations` */
 %header "include/parser.tab.h" /* Generate a header file in the include dir with the bison impl */
 
-// Include our AST type at the "top" (aka before the defines) that will allow us to pass it to our gen'd params below
-// AKA %*-param 
+/* Include our AST type at the "top" (aka before the defines) that will allow us to pass it to our gen'd params below */
+/* AKA %*-param  */
 %code top {
   #include "ast.h"
 }
 
-// Forward declare the parser error methods, this is just a fact of bison/yacc.
-// I can't find another way.
+/* Forward declare the parser error methods, this is just a fact of bison/yacc. */
+/* I can't find another way. */
 %code {
   extern void yyerror(YYLTYPE* loc, struct ast_node* document, const char* s);
   extern void yywarn (YYLTYPE* loc, struct ast_node* document, const char* s);
 }
 
-// Pass data to the lexer and parser, specifically the document we're building
-// This is what takes our example from simple to something actually useful in the real world
+/* Pass data to the lexer and parser, specifically the document we're building */
+/* This is what takes our example from simple to something actually useful in the real world */
 %lex-param   { struct ast_node* document }
 %parse-param { struct ast_node* document }
 
-// Create a bison union to handle the different types our tokens will emit.
+/* Create a bison union to handle the different types our tokens will emit. */
 %union {
   char* string;
   struct ast_node* node;
 }
 
-// Generic tokens
+/* Generic tokens */
 %token EOL
 %token <string> IDENT
 %token <string> STRING
 %token NULL
 
-// AST grammar types, probably all node or struct ast_node* specifically
+/* AST grammar types, probably all node or struct ast_node* specifically */
 %type <node> values
 %type <node> item
 %type <node> value
 
 %%
 
-// The root document, this is where our tree is finally placed for us to use
+/* The root document, this is where our tree is finally placed for us to use */
 document : values { ast_node_object_append(document, $1); }
 
-// Everything after this point is test code... PLEASE INGORE
+/* Everything after this point is test code... PLEASE INGORE */
 
 values : 
     item { 
@@ -80,7 +80,7 @@ value :
 
 %%
 
-// Handle errors and warns, ignore warns for now
+/* Handle errors and warns, ignore warns for now */
 
 void yyerror(YYLTYPE* loc, struct ast_node *document, const char *s)
 {

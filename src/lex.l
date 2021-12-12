@@ -15,9 +15,9 @@
     - reetrant: ignore global state and generate yylex methods with state than can be passed in AKA: Not global
     - bison-*: is just to link our tools, bridge is to help with params and location help... well..
     - warn: Give us warnings about broken rules in our tokenizer
-    - noyywrap: As far as I know, don't handle recursion automatically?
-    - nodefault: Do not define a default rule, so don't match EVERYTHING automatically
-    - stack: Use a stack based tokenizer to simplify errors? This is up to debate since the docs scare me
+    - noyywrap: Stop on first EOF, I assume using this removes the need for EOF rule
+    - nodefault: Don't print to stdout by default
+    - stack: Use a stack based tokenizer to allow for better state handling, not using this yet...
     - yylineno: This is supposed to pass the current position in the stream to bison, 
                 but I don't know if it actually does shit now
 */
