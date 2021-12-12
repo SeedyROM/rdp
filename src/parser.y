@@ -26,6 +26,7 @@
 	extern void yywarn (YYLTYPE* loc, struct ast_node* document, const char* s);
 }
 
+%lex-param	 { struct ast_node* document }
 %parse-param { struct ast_node* document }
 
 %union {
