@@ -30,17 +30,17 @@ $(BUILD_DIR)/%.c.o: %.c
 	$(MKDIR_P) $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
+.PHONY: clean parser
+
+clean:
+	$(RM) -r $(BUILD_DIR)
+
 # Generate our parser code
 %.yy.c: %.l
 	flex -o $@ $< 
 %.tab.c: %.y
 	bison -d -o $@ $< 
 parser: src/lex.yy.c src/parser.tab.c
-
-.PHONY: clean
-
-clean:
-	$(RM) -r $(BUILD_DIR)
 
 -include $(DEPS)
 
