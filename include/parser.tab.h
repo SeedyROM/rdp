@@ -64,7 +64,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 27 "src/parser.y"
+#line 31 "src/parser.y"
 
   char* string;
 	struct ast_node* node;
@@ -103,7 +103,7 @@ typedef struct yypstate yypstate;
 
 
 int yypush_parse (yypstate *ps,
-                  int pushed_char, YYSTYPE const *pushed_val, YYLTYPE *pushed_loc);
+                  int pushed_char, YYSTYPE const *pushed_val, YYLTYPE *pushed_loc, struct ast_node* document);
 
 yypstate *yypstate_new (void);
 void yypstate_delete (yypstate *ps);

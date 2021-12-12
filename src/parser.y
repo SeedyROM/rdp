@@ -17,12 +17,16 @@
 %locations
 %header "include/parser.tab.h"
 
-%code {
+%code top {
 	#include "ast.h"
-
-	extern void yyerror(YYLTYPE* loc, const char* s);
-	extern void yywarn (YYLTYPE* loc, const char* s);
 }
+
+%code {
+	extern void yyerror(YYLTYPE* loc, struct ast_node* document, const char* s);
+	extern void yywarn (YYLTYPE* loc, struct ast_node* document, const char* s);
+}
+
+%parse-param { struct ast_node* document }
 
 %union {
   char* string;
@@ -37,13 +41,15 @@
 
 %%
 
+document : values { ast_node_object_append(document, $1); }
+
 values : 
 		value { 
 			$$ = ast_node_array();
 			ast_node_array_append($$, $1);
 		}
 	| values value {
-			ast_node_array_append($$, $1);
+			ast_node_array_append($1, $2);
 		}
 
 value : 
@@ -52,7 +58,7 @@ value :
 
 %%
 
-void yyerror(YYLTYPE* loc, const char *s)
+void yyerror(YYLTYPE* loc, struct ast_node *document, const char *s)
 {
 	fflush(stderr);
 	fprintf(stderr, "Parse error: %s\n", s);

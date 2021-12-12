@@ -14,9 +14,59 @@
 #include "parser.tab.h"
 #include "lex.yy.h"
 
+#include "utarray.h"
 #include "ast.h"
 
 // #define DEBUG
+
+void _print_ast_debug_inner(ast_node *node, size_t max_depth, size_t depth)
+{
+  if(depth >= max_depth) return;
+
+  switch(node->type) {
+    case ast_OBJECT:
+      printf("Object:\n");
+      ast_node* child = NULL;
+
+      while((child = (ast_node*)utarray_next((UT_array*) node->value, child))) {
+        _print_ast_debug_inner((ast_node *)child, max_depth, depth + 1);
+      }
+    break;
+
+    case ast_ARRAY:
+      printf("Array:\n");
+      ast_node* child = NULL;
+
+      while((child = (ast_node*)utarray_next((UT_array*) node->value, child))) {
+        _print_ast_debug_inner((ast_node *)child, max_depth, depth + 1);
+      }
+    break;
+
+    case ast_NULL:
+      printf("Null\n");
+    break;
+
+    case ast_BOOL:
+      printf("Bool: %d\n", node->value);
+    break;
+
+    case ast_IDENT:
+      printf("Ident: %s\n", node->value);
+    break;
+
+    default:
+      fprintf(stderr, "Invalid node %s\n", node->type);
+      exit(1);
+    return;
+  }
+}
+
+void print_ast_debug(ast_node *root)
+{
+  size_t max_depth = 16;
+  size_t depth = 0;
+  return _print_ast_debug_inner(root, max_depth, depth);
+}
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +78,9 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Failed to load file...\n");
     return 1;
   }
+
+  // AST
+  ast_node *root_node = ast_node_object();
 
   // Setup the scanner and parser state
   yyscan_t scanner;
@@ -51,8 +104,10 @@ int main(int argc, char *argv[])
   do
   {
     token = yylex(&yylval, &yyloc, scanner);
-    status = yypush_parse(ps, token, &yylval, &yyloc);
+    status = yypush_parse(ps, token, &yylval, &yyloc, root_node);
   } while (status == YYPUSH_MORE);
+
+  print_ast_debug(root_node);
 
   // Free stuff up
   yypstate_delete(ps);
