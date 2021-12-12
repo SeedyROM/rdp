@@ -87,3 +87,70 @@ int ast_node_array_append(struct ast_node *root, ast_node *node)
   utarray_push_back((UT_array *)root->value, node);
   return 1;
 }
+
+void __ast_print_debug_indent(size_t depth)
+{
+  for (size_t i = 0; i < depth; i++)
+  {
+    printf("  ");
+  }
+}
+
+void __ast_print_debug_inner(ast_node *node, size_t max_depth, size_t depth)
+{
+  // Stop recursing at a specified depth
+  if (depth >= max_depth)
+    return;
+
+  // Use to handle object and array recursive calls
+  ast_node *child = NULL;
+
+  // Help with prettier printing
+  __ast_print_debug_indent(depth);
+
+  // Print info based on the node type
+  switch (node->type)
+  {
+  case ast_OBJECT:
+    printf("Object:\n");
+
+    while ((child = (ast_node *)utarray_next((UT_array *)node->value, child)))
+    {
+      __ast_print_debug_inner(child, max_depth, depth + 1);
+    }
+    break;
+
+  case ast_ARRAY:
+    printf("Array:\n");
+
+    while ((child = (ast_node *)utarray_next((UT_array *)node->value, child)))
+    {
+      __ast_print_debug_inner(child, max_depth, depth + 1);
+    }
+    break;
+
+  case ast_NULL:
+    printf("Null\n");
+    break;
+
+  case ast_BOOL:
+    printf("Bool: %d\n", node->value);
+    break;
+
+  case ast_IDENT:
+    printf("Ident: %s\n", node->value);
+    break;
+
+  default:
+    fprintf(stderr, "Invalid node %s\n", node->type);
+    exit(1);
+    return;
+  }
+}
+
+void ast_print_debug(ast_node *root)
+{
+  size_t max_depth = 32; // TODO: This should be configurable
+  size_t depth = 0;
+  return __ast_print_debug_inner(root, max_depth, depth);
+}
