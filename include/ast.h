@@ -56,13 +56,7 @@ typedef struct ast_node
  */
 static UT_icd ast_node_icd = {sizeof(ast_node), NULL, NULL, NULL};
 
-/**
- * @brief Create a new AST node
- * 
- * @param type 
- * @param value 
- * @return ast_node* 
- */
+// Create a new node of any type, see docs in impl
 ast_node *ast_node_new(ast_node_type type, ast_node_value *value);
 
 // Node creation helpers

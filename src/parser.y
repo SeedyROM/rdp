@@ -39,7 +39,7 @@
 %token NULL
 
 %type <node> values
-%type <node> values_value
+%type <node> item
 %type <node> value
 
 %%
@@ -47,15 +47,15 @@
 document : values { ast_node_object_append(document, $1); }
 
 values : 
-		values_value { 
+		item { 
 			$$ = ast_node_array();
 			ast_node_array_append($$, $1);
 		}
-	| values values_value {
+	| values item {
 			ast_node_array_append($1, $2);
 		}
 
-values_value : 
+item : 
 		value
 	| value EOL
 

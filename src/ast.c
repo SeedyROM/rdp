@@ -14,6 +14,13 @@
 
 #include "ast.h"
 
+/**
+ * @brief Used to generate nodes of any type, used by all general helper methods
+ * 
+ * @param type 
+ * @param value 
+ * @return ast_node* 
+ */
 ast_node *ast_node_new(ast_node_type type, ast_node_value *value)
 {
   ast_node *node = malloc(sizeof(ast_node));
@@ -28,26 +35,54 @@ ast_node *ast_node_new(ast_node_type type, ast_node_value *value)
   return node;
 }
 
+/**
+ * @brief Create a null (empty) node
+ * 
+ * @return ast_node* 
+ */
 ast_node *ast_node_null()
 {
   return ast_node_new(ast_NULL, NULL);
 }
 
+/**
+ * @brief Create a bool node
+ * 
+ * @param value 
+ * @return ast_node* 
+ */
 ast_node *ast_node_bool(int value)
 {
   return ast_node_new(ast_BOOL, (ast_node_value *)&value);
 }
 
+/**
+ * @brief Create a identifier node
+ * 
+ * @param value 
+ * @return ast_node* 
+ */
 ast_node *ast_node_ident(char *value)
 {
   return ast_node_new(ast_IDENT, (ast_node_value *)value); // Maybe don't dupe it?
 }
 
+/**
+ * @brief Create a string node
+ * 
+ * @param value 
+ * @return ast_node* 
+ */
 ast_node *ast_node_string(char *value)
 {
   return ast_node_new(ast_STRING, (ast_node_value *)value); // Maybe don't dupe it?
 }
 
+/**
+ * @brief Create an object node
+ * 
+ * @return ast_node* 
+ */
 ast_node *ast_node_object()
 {
   UT_array *nodes;
@@ -56,6 +91,11 @@ ast_node *ast_node_object()
   return ast_node_new(ast_OBJECT, (ast_node_value *)nodes);
 }
 
+/**
+ * @brief Create an array node 
+ * 
+ * @return ast_node* 
+ */
 ast_node *ast_node_array()
 {
   UT_array *nodes;
@@ -64,6 +104,13 @@ ast_node *ast_node_array()
   return ast_node_new(ast_ARRAY, (ast_node_value *)nodes);
 }
 
+/**
+ * @brief Append a node to an object, typically going to be a kv_pair
+ * 
+ * @param root 
+ * @param node 
+ * @return int 
+ */
 int ast_node_object_append(struct ast_node *root, ast_node *node)
 {
   if (root->type != ast_OBJECT)
@@ -76,6 +123,13 @@ int ast_node_object_append(struct ast_node *root, ast_node *node)
   return 1;
 }
 
+/**
+ * @brief Append a node to an array
+ * 
+ * @param root 
+ * @param node 
+ * @return int 
+ */
 int ast_node_array_append(struct ast_node *root, ast_node *node)
 {
   if (root->type != ast_ARRAY)
@@ -149,6 +203,11 @@ void __ast_print_debug_inner(ast_node *node, size_t max_depth, size_t depth)
   }
 }
 
+/**
+ * @brief Debug print an ast for sanity's sake
+ * 
+ * @param root 
+ */
 void ast_print_debug(ast_node *root)
 {
   size_t max_depth = 32; // TODO: This should be configurable
