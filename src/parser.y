@@ -35,6 +35,7 @@
 
 %token EOL
 %token <string> IDENT
+%token <string> STRING
 
 %type <node> values
 %type <node> value

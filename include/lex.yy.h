@@ -247,6 +247,8 @@ void yyfree ( void * , yyscan_t yyscanner );
 
 #ifdef YY_HEADER_EXPORT_START_CONDITIONS
 #define INITIAL 0
+#define SINGLE_STRING 1
+#define SINGLE_LINE_COMMENT 2
 
 #endif
 
@@ -518,9 +520,9 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 31 "src/lex.l"
+#line 60 "src/lex.l"
 
 
-#line 524 "include/lex.yy.h"
+#line 526 "include/lex.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */
