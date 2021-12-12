@@ -69,7 +69,7 @@ union YYSTYPE
 #line 39 "src/parser.y"
 
   char* string;
-	struct ast_node* node;
+  struct ast_node* node;
 
 #line 75 "include/parser.tab.h"
 

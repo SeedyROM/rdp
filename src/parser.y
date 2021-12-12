@@ -20,25 +20,25 @@
 // Include our AST type at the "top" (aka before the defines) that will allow us to pass it to our gen'd params below
 // AKA %*-param 
 %code top {
-	#include "ast.h"
+  #include "ast.h"
 }
 
 // Forward declare the parser error methods, this is just a fact of bison/yacc.
 // I can't find another way.
 %code {
-	extern void yyerror(YYLTYPE* loc, struct ast_node* document, const char* s);
-	extern void yywarn (YYLTYPE* loc, struct ast_node* document, const char* s);
+  extern void yyerror(YYLTYPE* loc, struct ast_node* document, const char* s);
+  extern void yywarn (YYLTYPE* loc, struct ast_node* document, const char* s);
 }
 
 // Pass data to the lexer and parser, specifically the document we're building
 // This is what takes our example from simple to something actually useful in the real world
-%lex-param	 { struct ast_node* document }
+%lex-param   { struct ast_node* document }
 %parse-param { struct ast_node* document }
 
 // Create a bison union to handle the different types our tokens will emit.
 %union {
   char* string;
-	struct ast_node* node;
+  struct ast_node* node;
 }
 
 // Generic tokens
@@ -60,23 +60,23 @@ document : values { ast_node_object_append(document, $1); }
 // Everything after this point is test code... PLEASE INGORE
 
 values : 
-		item { 
-			$$ = ast_node_array();
-			ast_node_array_append($$, $1);
-		}
-	| values item {
-			ast_node_array_append($1, $2);
-		}
+    item { 
+      $$ = ast_node_array();
+      ast_node_array_append($$, $1);
+    }
+  | values item {
+      ast_node_array_append($1, $2);
+    }
 
 item : 
-		value
-	| value EOL
+    value
+  | value EOL
 
 value :
-		NULL 			{ $$ = ast_node_null();     }
-	|	IDENT 		{ $$ = ast_node_ident($1);  }
-	| STRING 		{ $$ = ast_node_string($1); }
-	
+    NULL       { $$ = ast_node_null();     }
+  |  IDENT     { $$ = ast_node_ident($1);  }
+  | STRING     { $$ = ast_node_string($1); }
+  
 
 %%
 
@@ -84,12 +84,12 @@ value :
 
 void yyerror(YYLTYPE* loc, struct ast_node *document, const char *s)
 {
-	fflush(stderr);
-	fprintf(stderr, "Parse error: %s\n", s);
+  fflush(stderr);
+  fprintf(stderr, "Parse error: %s\n", s);
 }
 
 /* void yywarn(YYLTYPE* loc, const char *s)
 {
-	fflush(stdout);
-	printf("Warning in %s at line %d: %s\n", loc->filename, loc->first_line, s);
+  fflush(stdout);
+  printf("Warning in %s at line %d: %s\n", loc->filename, loc->first_line, s);
 } */
