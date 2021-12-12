@@ -16,6 +16,12 @@
 #include "parser.tab.h"
 #include "lex.yy.h"
 
+/**
+ * @brief Parse a document from a path, this is just a placeholder for now
+ * 
+ * @param file_path 
+ * @return ast_node* 
+ */
 ast_node *parse_document(const char *file_path)
 {
   // Open a file
@@ -26,27 +32,28 @@ ast_node *parse_document(const char *file_path)
     exit(1); // TODO: Crash for now
   }
 
-  // AST root node, it will always begin with an object
+  // Create an AST root node, it will always begin with an object
   ast_node *root_node = ast_node_object();
 
   // Setup the scanner and parser state
+  // TODO; Describe/abstract this better
   yyscan_t scanner;
+  yypstate *ps = yypstate_new();
+  yylex_init(&scanner);
   int status, token;
   YYSTYPE yylval;
   YYLTYPE yyloc = {0};
-  yypstate *ps = yypstate_new();
-  yylex_init(&scanner);
 
-  // Load a test file
+  // Load a test file into the scanner
   yyset_in(f, scanner);
 
-  // Set debug
+  // Debug output
 #ifdef DEBUG
   yyset_debug(1, scanner); // For Flex (no longer a global, but rather a member of yyguts_t)
   yydebug = 1;             // For Bison (still global, even in a reentrant parser)
 #endif
 
-  // Push tokens from yylex into our parser, no globals or pulling from lex
+  // Push tokens from yylex into our parser
   do
   {
     token = yylex(&yylval, &yyloc, scanner);
@@ -58,5 +65,6 @@ ast_node *parse_document(const char *file_path)
   // TODO: Free ast nodes
   fclose(f);
 
+  // Return back the output of our RD into the parse nodes
   return root_node;
 }

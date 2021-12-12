@@ -13,6 +13,6 @@
 
 #include "ast.h"
 
-typedef ast_node *document;
+typedef ast_node document;
 
 ast_node *parse_document(const char *file_path);

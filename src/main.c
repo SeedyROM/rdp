@@ -13,8 +13,9 @@
 
 int main(int argc, char *argv[])
 {
-  document doc = parse_document("./test.txt");
+  document *doc = parse_document("./test.txt");
   ast_print_debug(doc);
 
+  // TODO: Free the document, figure out the ICD other shit and recursive free
   return 0;
 }
