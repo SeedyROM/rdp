@@ -9,13 +9,13 @@
  * 
  */
 
-%define api.pure full // Make sure the generated parser is reentrant (aka the state is locally defined), bad naming IMO
-%define api.push-pull push // Don't circularly rely on the yylex method, push tokens to our parser when needed
-%define parse.trace // Helps debug logs
-%define parse.error verbose // Helps errors
-%define api.token.prefix {T_} // Preface our tokens with a T to make use later simpler
-%locations // Use bison locations, flex has a complimentary option we're using called `%option bison-locations`
-%header "include/parser.tab.h" // Generate a header file in the include dir with the bison impl
+%define api.pure full /* Make sure the generated parser is reentrant (aka the state is locally defined), bad naming IMO */
+%define api.push-pull push /* Don't circularly rely on the yylex method, push tokens to our parser when needed */
+%define parse.trace /* Helps debug logs */
+%define parse.error verbose /* Helps errors */
+%define api.token.prefix {T_} /* Preface our tokens with a T to make use later simpler */
+%locations /* Use bison locations, flex has a complimentary option we're using called `%option bison-locations` */
+%header "include/parser.tab.h" /* Generate a header file in the include dir with the bison impl */
 
 // Include our AST type at the "top" (aka before the defines) that will allow us to pass it to our gen'd params below
 // AKA %*-param 
