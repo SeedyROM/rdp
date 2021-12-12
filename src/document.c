@@ -11,7 +11,6 @@
 
 #include "document.h"
 
-#include "utarray.h"
 #include "ast.h"
 
 #include "parser.tab.h"
@@ -35,7 +34,6 @@ ast_node *parse_document(const char *file_path)
   int status, token;
   YYSTYPE yylval;
   YYLTYPE yyloc = {0};
-
   yypstate *ps = yypstate_new();
   yylex_init(&scanner);
 
