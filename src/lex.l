@@ -23,6 +23,7 @@
 
 blank [ \t]
 identifier [a-zA-Z][a-zA-Z_0-9]*
+null "null"
 
 %x SINGLE_STRING
 %x SINGLE_LINE_COMMENT
@@ -31,6 +32,7 @@ identifier [a-zA-Z][a-zA-Z_0-9]*
 
 {blank}            ;
 \n                 { return T_EOL; }
+{null}             { return T_NULL; }
 {identifier}       { yylval->string = strdup(yytext); return T_IDENT; }
 
 \"                 BEGIN(SINGLE_STRING);

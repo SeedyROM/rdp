@@ -36,8 +36,10 @@
 %token EOL
 %token <string> IDENT
 %token <string> STRING
+%token NULL
 
 %type <node> values
+%type <node> values_value
 %type <node> value
 
 %%
@@ -45,17 +47,23 @@
 document : values { ast_node_object_append(document, $1); }
 
 values : 
-		value { 
+		values_value { 
 			$$ = ast_node_array();
 			ast_node_array_append($$, $1);
 		}
-	| values value {
+	| values values_value {
 			ast_node_array_append($1, $2);
 		}
 
-value : 
-		IDENT 		{ $$ = ast_node_ident($1); }
-	| IDENT EOL { $$ = ast_node_ident($1); }
+values_value : 
+		value
+	| value EOL
+
+value :
+		NULL 			{ $$ = ast_node_null();     }
+	|	IDENT 		{ $$ = ast_node_ident($1);  }
+	| STRING 		{ $$ = ast_node_string($1); }
+	
 
 %%
 

@@ -2,4 +2,6 @@ yoted
 king
 it
 works
-yass
+"yass"
+null
+null

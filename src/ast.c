@@ -88,12 +88,9 @@ int ast_node_array_append(struct ast_node *root, ast_node *node)
   return 1;
 }
 
-void __ast_print_debug_indent(size_t depth)
+inline void __ast_print_debug_indent(size_t depth)
 {
-  for (size_t i = 0; i < depth; i++)
-  {
-    printf("  ");
-  }
+  printf("%0*s", depth * 2, "");
 }
 
 void __ast_print_debug_inner(ast_node *node, size_t max_depth, size_t depth)
@@ -139,6 +136,10 @@ void __ast_print_debug_inner(ast_node *node, size_t max_depth, size_t depth)
 
   case ast_IDENT:
     printf("Ident: %s\n", node->value);
+    break;
+
+  case ast_STRING:
+    printf("String: \"%s\"\n", node->value);
     break;
 
   default:

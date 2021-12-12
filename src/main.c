@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
     status = yypush_parse(ps, token, &yylval, &yyloc, root_node);
   } while (status == YYPUSH_MORE);
 
+  // Verify that we actually did what we did by eye for now
   ast_print_debug(root_node);
 
   // Free stuff up
