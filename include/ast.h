@@ -22,11 +22,19 @@ typedef enum
   ast_NULL,
   ast_BOOL,
   ast_IDENT,
+  ast_KEY_PAIR,
   ast_STRING,
   ast_NUMBER,
   ast_ARRAY,
   ast_OBJECT
 } ast_node_type;
+
+typedef struct ast_node ast_node;
+
+typedef struct {
+  char *key;
+  ast_node *value;
+} ast_key_pair;
 
 /**
  * @brief Node value enum
@@ -37,6 +45,7 @@ typedef union
   int int_value;
   double double_value;
   char *string_value;
+  ast_key_pair *key_pair_value;
   UT_array *children;
 } ast_node_value;
 
@@ -65,11 +74,12 @@ ast_node *ast_node_bool(int value);
 ast_node *ast_node_ident(char *value);
 ast_node *ast_node_string(char *value);
 ast_node *ast_node_object();
+ast_node *ast_node_key_pair(char *key, ast_node *value);
 ast_node *ast_node_array();
 
 // Recursive node insertion helpers
-int ast_node_object_append(struct ast_node *root, ast_node *node);
-int ast_node_array_append(struct ast_node *root, ast_node *node);
+int ast_node_object_append(ast_node *root, ast_node *node);
+int ast_node_array_append(ast_node *root, ast_node *node);
 
 // Debug print helpers
 void __ast_print_debug_indent(size_t depth);

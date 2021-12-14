@@ -36,7 +36,7 @@
 
 /* General rules for our tokenizer */
 blank [ \t]
-identifier [a-zA-Z][a-zA-Z_0-9]*
+identifier [a-zA-Z][a-zA-Z_\-0-9]+
 null "null"
 
 /* Custom tokenizer states */
@@ -49,6 +49,7 @@ null "null"
 \n                 { return T_EOL; }
 {null}             { return T_NULL; }
 {identifier}       { yylval->string = strdup(yytext); return T_IDENT; }
+":"                { return T_COLON; }
 
 \"                 BEGIN(SINGLE_STRING);
 <SINGLE_STRING>{

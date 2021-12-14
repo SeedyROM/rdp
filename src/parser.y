@@ -43,19 +43,24 @@
 
 /* Generic tokens */
 %token EOL
+%token NULL
+%token COLON 
 %token <string> IDENT
 %token <string> STRING
-%token NULL
 
 /* AST grammar types, probably all node or struct ast_node* specifically */
 %type <node> values
 %type <node> item
 %type <node> value
+%type <string> key
+%type <node> object
+%type <node> key_pair
+%type <node> pair
 
 %%
 
 /* The root document, this is where our tree is finally placed for us to use */
-document : values { ast_node_object_append(document, $1); }
+document : object { ast_node_object_append(document, $1); }
 
 /* Everything after this point is test code... PLEASE INGORE */
 
@@ -72,20 +77,39 @@ item :
     value
   | value EOL
 
+key :
+    IDENT      { $$ = $1;  }
+  | STRING     { $$ = $1; }
+
 value :
     NULL       { $$ = ast_node_null();     }
-  |  IDENT     { $$ = ast_node_ident($1);  }
+  | IDENT      { $$ = ast_node_ident($1);  }
   | STRING     { $$ = ast_node_string($1); }
-  
+
+object :
+	  key_pair { 
+      $$ = ast_node_object(); 
+      ast_node_object_append($$, $1); 
+    }	
+  | object key_pair { ast_node_object_append($1, $2); } 
+
+key_pair :
+    pair
+  | pair EOL
+
+pair : 
+  key COLON value { 
+    $$ = ast_node_key_pair((char*)$1, $3); 
+  }
 
 %%
 
 /* Handle errors and warns, ignore warns for now */
 
-void yyerror(YYLTYPE* loc, struct ast_node *document, const char *s)
+void yyerror(YYLTYPE *loc, struct ast_node *document, const char *s)
 {
   fflush(stderr);
-  fprintf(stderr, "Parse error: %s\n", s);
+  fprintf(stderr, "Parse error: %s at %d\n", s, *loc);
 }
 
 /* void yywarn(YYLTYPE* loc, const char *s)

@@ -113,7 +113,7 @@ ast_node *ast_node_array()
  */
 int ast_node_object_append(struct ast_node *root, ast_node *node)
 {
-  if (root->type != ast_OBJECT)
+  if (root->type != ast_OBJECT && node->type != ast_KEY_PAIR)
   {
     fprintf(stderr, "Cannot append %s to node of type %s\n", node->type, root->type);
     return 0;
@@ -121,6 +121,28 @@ int ast_node_object_append(struct ast_node *root, ast_node *node)
 
   utarray_push_back((UT_array *)root->value, node);
   return 1;
+}
+
+/**
+ * @brief Create a key pair to be used in an object
+ * 
+ * @param key 
+ * @param value 
+ * @return ast_node* 
+ */
+ast_node *ast_node_key_pair(char *key, ast_node *value)
+{
+  ast_key_pair *key_pair = malloc(sizeof(ast_key_pair));
+  if (key_pair == NULL)
+  {
+    fprintf(stderr, "Failed to allocate ast_node on the heap\n");
+    return NULL;
+  }
+
+  key_pair->key = key;
+  key_pair->value = value;
+
+  return ast_node_new(ast_KEY_PAIR, (ast_node_value*)key_pair);
 }
 
 /**
@@ -169,6 +191,14 @@ void __ast_print_debug_inner(ast_node *node, size_t max_depth, size_t depth)
     {
       __ast_print_debug_inner(child, max_depth, depth + 1);
     }
+    break;
+
+  case ast_KEY_PAIR:
+    ast_key_pair* pair = (ast_key_pair*)node->value;
+    printf("Key: %s\n", pair->key);
+    __ast_print_debug_indent(depth);
+    printf("Value: \n");
+    __ast_print_debug_inner(pair->value, max_depth, depth + 1);
     break;
 
   case ast_ARRAY:

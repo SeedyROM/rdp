@@ -1,7 +1,3 @@
-yoted
-king
-it
-works
-"yass"
-null
-null
+yoted: king # comment
+value: null
+"edy is gay": "she's super gay" # yeah she is

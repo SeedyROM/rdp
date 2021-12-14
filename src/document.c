@@ -58,6 +58,10 @@ ast_node *parse_document(const char *file_path)
   {
     token = yylex(&yylval, &yyloc, scanner);
     status = yypush_parse(ps, token, &yylval, &yyloc, root_node);
+    if (status < 0) // TODO: How to handle errors here... :'(
+    {
+      exit(1);
+    }
   } while (status == YYPUSH_MORE);
 
   // Free stuff up
